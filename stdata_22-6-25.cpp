@@ -25,6 +25,8 @@ int main() {
     cout << "Press 1 to Save New Student Data\n";
     cout << "Press 2 to Search Student by Roll Number\n";
     cout << "Press 3 to Display All Student Data\n";
+    cout << "Press 4 to update data\n";
+    cout << "Press 5 to delete data\n";
     cout << "Enter your choice: ";
     cin >> choice;
 
@@ -136,7 +138,94 @@ int main() {
         inFile.close();
     }
 
-    else {
+   
+    else if(choice==4){
+    	  ifstream inFile("students.txt");
+    	  ofstream tempFile("temp.txt");
+
+        if (!inFile || !tempFile) {
+            cout << "Error opening file for reading.\n";
+            return 1;
+        }
+
+        string searchRoll;
+        cout << "Enter Roll Number to search: ";
+        cin >> searchRoll;
+
+        string roll, name, father, gender, blood;
+        int found = 0;
+
+        while (inFile >> roll >> name >> father >> gender >> blood) {
+            if (roll == searchRoll) {
+            	found = 1;
+                cout<<"Enter update data"<<endl;
+                cout<<"Name:";
+                cin>>name;
+                cout<<"father:";
+                cin>>father;
+                cout<<"gender:";
+                cin>>gender;
+                cout<<"blood:";
+                cin>>blood;
+                
+             
+       }
+                
+    	tempFile << roll << " " << name << " " << father << " " << gender << " " << blood << endl;
+	}
+	inFile.close();
+	tempFile.close();
+	remove("students.txt");
+	rename("temp.txt","students.txt");
+	
+	if(found==1){
+		cout<<"data update sucesfully";
+		
+	}else{
+		cout<<"Roll number not found";
+	}
+
+    
+	}
+	else if (choice == 5) {
+    ifstream inFile("students.txt");
+    ofstream tempFile("temp.txt");
+
+    if (!inFile || !tempFile) {
+        cout << "Error opening file.\n";
+        return 1;
+    }
+
+    string roll, name, father, gender, blood;
+    string deleteRoll;
+    int found = 0;
+
+    cout << "Enter Roll Number to delete: ";
+    cin >> deleteRoll;
+
+    while (inFile >> roll >> name >> father >> gender >> blood) {
+        if (roll == deleteRoll) {
+            found = 1;
+            cout << "\n Record deleted successfully.\n";
+            continue; 
+        }
+        tempFile << roll << " " << name << " " << father << " " << gender << " " << blood << endl;
+    }
+
+    inFile.close();
+    tempFile.close();
+
+    remove("students.txt");
+    rename("temp.txt", "students.txt");
+
+    if (found == 0) {
+        cout << "\n? Roll Number not found.\n";
+    }
+
+    
+}
+
+	 else {
         cout << "Invalid choice. Please run the program again.\n";
          system("cls");
         goto menu;
